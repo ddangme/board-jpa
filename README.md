@@ -1,1 +1,1 @@
-# board-jpa
+# data-jpa
