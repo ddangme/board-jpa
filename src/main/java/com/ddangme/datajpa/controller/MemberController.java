@@ -1,9 +1,15 @@
 package com.ddangme.datajpa.controller;
 
+import com.ddangme.datajpa.dto.MemberDto;
 import com.ddangme.datajpa.entity.Member;
+import com.ddangme.datajpa.entity.Team;
 import com.ddangme.datajpa.repository.MemberRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +38,29 @@ public class MemberController {
 
     @PostConstruct
     public void init() {
-        memberRepository.save(new Member("userA"));
+        for (int i = 0; i < 100; i++) {
+            memberRepository.save(new Member("user" + i, i));
+        }
+    }
+
+
+    // 테스트 링크 : http://localhost:8080/members?page=0&size=3&sort=id,desc&sort=username,desc
+    // 페이지에 대한 값이 넘어오지 않으면 기본 값으로 설정된다. (기본 페이지 사이즈 : 20, 최대 페이지 사이즈 : 2000)
+    // yaml에서 spring.data.web.pageable.default-page-size: 20
+    // spring.data.web.pageable.max-page-size: 2000
+    @GetMapping("members")
+    public Page<Member> list(Pageable pageable) {
+        return memberRepository.findAll(pageable);
+    }
+
+    @GetMapping("members2")
+    public Page<Member> list2(@PageableDefault(size = 12, sort = "username",
+            direction = Sort.Direction.DESC) Pageable pageable) {
+        return memberRepository.findAll(pageable);
+    }
+
+    @GetMapping("members3")
+    public Page<MemberDto> list3(Pageable pageable) {
+        return memberRepository.findAll(pageable).map(MemberDto::new);
     }
 }
