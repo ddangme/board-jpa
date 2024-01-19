@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public class MemberJpaRepository {
-
     @PersistenceContext
     private EntityManager em;
 
@@ -46,6 +45,12 @@ public class MemberJpaRepository {
         return em.createQuery("SELECT m FROM Member m WHERE m.username = :username and m.age > :age", Member.class)
                 .setParameter("username", username)
                 .setParameter("age", age)
+                .getResultList();
+    }
+
+    public List<Member> findByUsername(String username) {
+        return em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", username)
                 .getResultList();
     }
 }
