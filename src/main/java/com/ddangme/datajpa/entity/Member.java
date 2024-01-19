@@ -1,9 +1,7 @@
-package com.ddangme.datajpa.domain;
+package com.ddangme.datajpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Query;
 
 @Entity
 @Getter @Setter
@@ -14,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
         query="SELECT m FROM Member m WHERE m.username = :username"
 )
 @NamedEntityGraph(name = "Member.all", attributeNodes = @NamedAttributeNode("team"))
-public class Member {
+public class Member extends JpaBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
