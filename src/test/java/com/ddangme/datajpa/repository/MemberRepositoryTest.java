@@ -106,4 +106,23 @@ class MemberRepositoryTest {
         assertThat(count).isEqualTo(0);
     }
 
+
+    @DisplayName("findByUsernameAndAgeGreaterThan TEST")
+    @Test
+    void findByUsernameAndAgeGreaterThan() {
+        // Given
+        Member member1 = new Member("member", 10);
+        Member member2 = new Member("member", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        // When
+        List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("member", 15);
+
+        // Then
+        assertThat(result.get(0).getUsername()).isEqualTo("member");
+        assertThat(result.get(0).getAge()).isEqualTo(20);
+        assertThat(result.size()).isEqualTo(1);
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.ddangme.datajpa.repository;
 
 import com.ddangme.datajpa.domain.Member;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +104,24 @@ class MemberJpaRepositoryTest {
         // Then
         long count = memberJpaRepository.count();
         assertThat(count).isEqualTo(0);
+    }
+
+    @DisplayName("findByUsernameAndAgeGreaterThan TEST")
+    @Test
+    void findByUsernameAndAgeGreaterThan() {
+        // Given
+        Member member1 = new Member("member", 10);
+        Member member2 = new Member("member", 20);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        // When
+        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("member", 15);
+
+        // Then
+        assertThat(result.get(0).getUsername()).isEqualTo("member");
+        assertThat(result.get(0).getAge()).isEqualTo(20);
+        assertThat(result.size()).isEqualTo(1);
     }
 
 }
