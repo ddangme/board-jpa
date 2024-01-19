@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
@@ -27,4 +28,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT m FROM Member m WHERE m.username in :names")
     List<Member> findByNames(@Param("names") Collection<String> names);
+
+    List<Member> findListByUsername(String username);   // 컬렉션 -- 검색 결과가 없을 경우 null이 아닌 빈 컬렉션으로 반환된다.
+
+    Member findOneByUsername(String username);          // 단건 -- 조회 결과가 여러 개일 경우 Error가 발생한다.
+
+    Optional<Member> findOptionalByUsername(String username); // 단건 Optional --  조회 결과가 여러 개일 경우 Error가 발생한다.
 }

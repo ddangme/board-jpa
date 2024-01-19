@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
@@ -225,6 +226,25 @@ class MemberRepositoryTest {
         for (Member byName : byNames) {
             System.out.println(byName);
         }
+    }
+
+    @DisplayName("return type TEST")
+    @Test
+    void returnTypeTest() {
+        // Given
+        Member m1 = new Member("member1", 10);
+        Member m2 = new Member("member2", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // When
+        List<Member> members = memberRepository.findListByUsername("member");
+        Member oneMember = memberRepository.findOneByUsername("member");
+        Optional<Member> optionalMember = memberRepository.findOptionalByUsername("member");
+
+        System.out.println(members);
+        System.out.println(oneMember);
+        System.out.println(optionalMember);
     }
 
 }
