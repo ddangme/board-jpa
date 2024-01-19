@@ -2,6 +2,8 @@ package com.ddangme.datajpa.repository;
 
 import com.ddangme.datajpa.domain.Member;
 import com.ddangme.datajpa.dto.MemberDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,4 +37,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findOptionalByUsername(String username); // 단건 Optional --  조회 결과가 여러 개일 경우 Error가 발생한다.
 
+    // @Query 어노테이션을 사용하지 않아도 동작하지만, 성능이 저하됐을 때 사용하면 좋다.
+    @Query(value = "SELECT m FROM Member m LEFT JOIN m.team t",
+            countQuery = "SELECT count(m) FROM Member m")
+    Page<Member> findByAge(int age, Pageable pageable);
 }
