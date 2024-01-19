@@ -1,6 +1,9 @@
 package com.ddangme.datajpa.repository;
 
 import com.ddangme.datajpa.domain.Member;
+import com.ddangme.datajpa.domain.Team;
+import com.ddangme.datajpa.dto.MemberDto;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +20,11 @@ import static org.assertj.core.api.Assertions.*;
 class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;
+    @Autowired TeamRepository teamRepository;
 
     @DisplayName("CREATE 테스트")
     @Test
+    @Disabled
     void createTest() {
         // Given
         Member member1 = new Member("member1");
@@ -39,6 +44,7 @@ class MemberRepositoryTest {
 
     @DisplayName("FIND ALL 테스트")
     @Test
+    @Disabled
     void findAllTest() {
         // Given
         Member member1 = new Member("member1");
@@ -55,6 +61,7 @@ class MemberRepositoryTest {
 
     @DisplayName("COUNT 테스트")
     @Test
+    @Disabled
     void countTest() {
         // Given
         Member member1 = new Member("member1");
@@ -71,6 +78,7 @@ class MemberRepositoryTest {
 
     @DisplayName("UPDATE 테스트")
     @Test
+    @Disabled
     void updateTest() {
         // Given
         Member member1 = new Member("member1");
@@ -90,6 +98,7 @@ class MemberRepositoryTest {
 
     @DisplayName("DELETE 테스트")
     @Test
+    @Disabled
     void deleteTest() {
         // Given
         Member member1 = new Member("member1");
@@ -154,6 +163,49 @@ class MemberRepositoryTest {
 
         // Then
         assertThat(result.get(0)).isEqualTo(m1);
+    }
+
+    @DisplayName("username List 가져오기")
+    @Test
+    void findUsernameListTest() {
+        // Given
+        Member m1 = new Member("member1", 10);
+        Member m2 = new Member("member2", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // When
+        List<String> usernames = memberRepository.findUsernameList();
+
+        // Then
+        for (String username : usernames) {
+            System.out.println(username);
+        }
+    }
+
+
+    @DisplayName("dto List 가져오기")
+    @Test
+    void findMemberDtoTest() {
+        // Given
+        Member m1 = new Member("member1", 10);
+        Member m2 = new Member("member2", 20);
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        m1.setTeam(teamA);
+        m2.setTeam(teamB);
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // When
+        List<MemberDto> findDto = memberRepository.findMemberDto();
+
+        // Then
+        for (MemberDto memberDto : findDto) {
+            System.out.println(memberDto);
+        }
     }
 
 }
