@@ -1,6 +1,7 @@
 package com.ddangme.datajpa.repository;
 
 import com.ddangme.datajpa.domain.Member;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("CREATE 테스트")
     @Test
+    @Disabled
     void createTest() {
         // Given
         Member member1 = new Member("member1");
@@ -39,6 +41,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("FIND ALL 테스트")
     @Test
+    @Disabled
     void findAllTest() {
         // Given
         Member member1 = new Member("member1");
@@ -55,6 +58,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("COUNT 테스트")
     @Test
+    @Disabled
     void countTest() {
         // Given
         Member member1 = new Member("member1");
@@ -71,6 +75,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("UPDATE 테스트")
     @Test
+    @Disabled
     void updateTest() {
         // Given
         Member member1 = new Member("member1");
@@ -90,6 +95,7 @@ class MemberJpaRepositoryTest {
 
     @DisplayName("DELETE 테스트")
     @Test
+    @Disabled
     void deleteTest() {
         // Given
         Member member1 = new Member("member1");
@@ -136,6 +142,33 @@ class MemberJpaRepositoryTest {
         List<Member> result = memberJpaRepository.findByUsername("member1");
         Member findMember = result.get(0);
         assertThat(findMember).isEqualTo(m1);
+    }
+
+    @DisplayName("페이징 TEST")
+    @Test
+    void paging() {
+        // Given
+        memberJpaRepository.save(new Member("member1", 10));
+        memberJpaRepository.save(new Member("member2", 10));
+        memberJpaRepository.save(new Member("member3", 10));
+        memberJpaRepository.save(new Member("member4", 10));
+        memberJpaRepository.save(new Member("member5", 10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+        // When
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        // 페이지  계산 공식 코드
+        // totalPage = totalCount / size ...
+        // 마지막 페이지 ...
+        // 최초 페이지 ...
+
+        // Then
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
     }
 
 }

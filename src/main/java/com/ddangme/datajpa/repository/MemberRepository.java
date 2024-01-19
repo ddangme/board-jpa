@@ -34,4 +34,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findOneByUsername(String username);          // 단건 -- 조회 결과가 여러 개일 경우 Error가 발생한다.
 
     Optional<Member> findOptionalByUsername(String username); // 단건 Optional --  조회 결과가 여러 개일 경우 Error가 발생한다.
+
 }
