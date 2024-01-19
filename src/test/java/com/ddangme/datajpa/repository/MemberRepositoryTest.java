@@ -384,5 +384,42 @@ class MemberRepositoryTest {
     }
 
 
+    @DisplayName("QueryHints TEST")
+    @Test
+    void QueryHintsTEst() {
+        // Given
+        memberRepository.save(new Member("member1"));
+
+        em.flush();
+        em.clear();
+
+        // When
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.setUsername("member2222");
+
+        em.flush();
+        em.clear();
+
+        // Then
+        Member findMember2 = memberRepository.findReadOnlyByUsername("member2222");
+        assertThat(findMember2).isNull();
+    }
+
+    @DisplayName("rock TEST")
+    @Test
+    void rockTest() {
+        // Given
+        memberRepository.save(new Member("member1"));
+
+        em.flush();
+        em.clear();
+
+        // When
+        Member findMember = memberRepository.findLockByUsername("member1");
+
+
+        // Then
+    }
+
 
 }
