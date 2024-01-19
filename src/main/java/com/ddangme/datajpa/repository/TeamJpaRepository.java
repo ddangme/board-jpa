@@ -1,6 +1,6 @@
 package com.ddangme.datajpa.repository;
 
-import com.ddangme.datajpa.domain.Team;
+import com.ddangme.datajpa.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;

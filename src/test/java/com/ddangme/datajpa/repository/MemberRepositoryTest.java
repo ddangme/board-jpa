@@ -1,7 +1,7 @@
 package com.ddangme.datajpa.repository;
 
-import com.ddangme.datajpa.domain.Member;
-import com.ddangme.datajpa.domain.Team;
+import com.ddangme.datajpa.entity.Member;
+import com.ddangme.datajpa.entity.Team;
 import com.ddangme.datajpa.dto.MemberDto;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Disabled;

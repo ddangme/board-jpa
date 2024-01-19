@@ -1,6 +1,6 @@
 package com.ddangme.datajpa.repository;
 
-import com.ddangme.datajpa.domain.Member;
+import com.ddangme.datajpa.entity.Member;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
