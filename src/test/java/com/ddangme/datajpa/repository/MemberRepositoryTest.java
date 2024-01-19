@@ -140,4 +140,20 @@ class MemberRepositoryTest {
         assertThat(findMember).isEqualTo(m1);
     }
 
+    @DisplayName("Query TEST")
+    @Test
+    void queryTest() {
+        // Given
+        Member m1 = new Member("member1", 10);
+        Member m2 = new Member("member2", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        // When
+        List<Member> result = memberRepository.findUser("member1", 10);
+
+        // Then
+        assertThat(result.get(0)).isEqualTo(m1);
+    }
+
 }
