@@ -4,6 +4,7 @@ import com.ddangme.datajpa.domain.Member;
 import com.ddangme.datajpa.dto.MemberDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
-    @Query(name = "Member.findByUsername")
-    List<Member> findByUsername(@Param("username") String username);
+//    @Query(name = "Member.findByUsername")
+//    List<Member> findByUsername(@Param("username") String username);
 
     // 정적 쿼리에만 사용하는 것이 좋다. 동적 쿼리가 필요할 경우 QueryDLS를 사용한다.
     @Query("SELECT m FROM Member m WHERE m.username = :username AND m.age = :age")
@@ -49,4 +50,25 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // clearAutomatically = true 혹은 em.clear를 사용해 주어야 한다.
     @Query("UPDATE Member m SET m.age = m.age + 1 WHERE m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
+
+    // FETCH : 연관된 TEAM도 함께 조회한다.
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.team")
+    List<Member> findMemberFetchJoin();
+
+    // 공통 메서드 오버라이드
+    @Override
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findAll();
+
+    // JPQL + 엔티티 그래프
+//    @EntityGraph(attributePaths = {"team"})
+//    @Query("SELECT m FROM Member m")
+    @EntityGraph("Member.all")
+    @Query("SELECT m FROM Member m")
+    List<Member> findMemberEntityGraph();
+
+    // 메서드 이름으로 쿼리에서 특히 편리하다.
+    @EntityGraph("Member.all")
+    List<Member> findByUsername(String username);
+
 }

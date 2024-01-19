@@ -3,6 +3,7 @@ package com.ddangme.datajpa.repository;
 import com.ddangme.datajpa.domain.Member;
 import com.ddangme.datajpa.domain.Team;
 import com.ddangme.datajpa.dto.MemberDto;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;
     @Autowired TeamRepository teamRepository;
+    @Autowired EntityManager em;
 
     @DisplayName("CREATE 테스트")
     @Test
@@ -301,5 +303,86 @@ class MemberRepositoryTest {
         // Then
         assertThat(resultCount).isEqualTo(3);
     }
+
+    @DisplayName("Lazy TEST")
+    @Test
+    void findMemberLazyTest() {
+        // Given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 20, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        // When
+        List<Member> members = memberRepository.findAll();
+
+        // Then
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println(member.getTeam().getName());
+        }
+    }
+
+
+    @DisplayName("findMemberFetchJoin TEST")
+    @Test
+    void findMemberFetchJoinTest() {
+        // Given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 20, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        // When
+        List<Member> members = memberRepository.findMemberFetchJoin();
+
+        // Then
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println(member.getTeam().getName());
+        }
+    }
+
+    @DisplayName("EntityGraph TEST")
+    @Test
+    void entityGraphTest() {
+        // Given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member member1 = new Member("member1", 10, teamA);
+        Member member2 = new Member("member2", 20, teamB);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        // When
+        List<Member> members = memberRepository.findMemberEntityGraph();
+
+        // Then
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println(member.getTeam().getName());
+        }
+    }
+
+
 
 }
