@@ -5,6 +5,7 @@ import com.ddangme.datajpa.dto.MemberDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -41,4 +42,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(value = "SELECT m FROM Member m LEFT JOIN m.team t",
             countQuery = "SELECT count(m) FROM Member m")
     Page<Member> findByAge(int age, Pageable pageable);
+
+    @Modifying(clearAutomatically = true) // 변경되는 코드임을 알려주어야 한다.
+    // clearAutomatically = true를 작성해 주어야 영속성 컨텍스트를 초기화해준다.
+    // 같은 트랙잭션 안에서 조회할 일이 있다면 꼭 해당 구문을 작성해 주어야 한다.
+    // clearAutomatically = true 혹은 em.clear를 사용해 주어야 한다.
+    @Query("UPDATE Member m SET m.age = m.age + 1 WHERE m.age >= :age")
+    int bulkAgePlus(@Param("age") int age);
 }

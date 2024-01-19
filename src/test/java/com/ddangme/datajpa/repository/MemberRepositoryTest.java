@@ -284,4 +284,22 @@ class MemberRepositoryTest {
         assertThat(page.hasNext()).isTrue();
     }
 
+
+    @DisplayName("벌크성 수정 쿼리 TEST")
+    @Test
+    void bulkAgePlusTest() {
+        // Given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+
+        // When
+        int resultCount = memberRepository.bulkAgePlus(20);
+
+        // Then
+        assertThat(resultCount).isEqualTo(3);
+    }
+
 }
